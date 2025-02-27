@@ -1,0 +1,166 @@
+<%- include("partials/header1"); -%>
+<%var loggedin=false;%>
+<%if(typeof user.email!="undefined"){loggedin = true;}%>
+<div id="headerlogin">
+  <%if(loggedin!=true){%>
+    <a href="/login" id="login">Login</a>
+    <a href="/signup" id="signup">Sign Up</a>
+  <%}%>
+  <%if(loggedin==true){%>
+    <div id="headeruser">
+      <div><p id="signup" onclick="userbutton()"><img src="<%=user.profile_image%>" alt="not found" height="25" width="20" loading="lazy"><%=user.username+" "%><i class="arrow down"></i></p></div>
+      <div><p id="userinfo" onclick="myaccount()">My Account</p></div>
+      <div><p id="signout" onclick="signout()">Sign Out</p></div>
+    </div>
+  <%}%>
+</div>
+<%- include("partials/extra1"); -%>
+<main class="mains">
+<div class="leftmain">
+    <h5 class="firsttag" style="text-align: center;">NEWS POST</h5>
+    <div class="newsitems" style="grid-template-columns: 1fr;">
+     <%if(postdetails!=null){%>
+      <div class="articletitle" style="display: block; margin-left:10px; margin-right: 10px;">
+            <%=postdetails.posttitle%>
+        </div>
+        <div class="posteddate" style="display: block; margin-left:10px; margin-right: 10px;">
+          <p style="display: inline; font-weight: 600;">Posted on : </p>
+          <p style="margin-left: 5px; display: inline"><%=postdetails.postdate%></p>
+        </div>
+        <div class="postauthor" style="display: block; margin-left:10px; margin-right: 10px;">
+          <p style="display: inline;font-weight: 600;">Posted by : </p>
+          <p style="margin-left: 5px; display: inline"><%=postdetails.postauthor%></p>
+        </div>
+        <div class="articleimg" style="margin-top: 25px;display: block;margin-left: auto;margin-right: auto;">
+          <img src="<%=postdetails.postimg%>" alt="Image not found" height="500" width="800">
+        </div>
+        <div class="articlecontent1" style="margin-top: 40px;display: block; margin-left:10px; margin-right: 10px;">
+          <%- postdetails.postdata %>
+        </div>
+      <%}%>
+    </div>
+    <br>
+<h5 class="firsttag">Comments</h5>
+<div class="comments">
+<%if(loggedin){%>
+  <div class="post" style="margin-left: 0;">
+    <div>
+      <img src=<%-user.profile_image%> alt="" height="50px" width="50px">
+    </div> 
+    <div style="margin-left: 10px;">
+      <div>
+        <%=user.username%>
+      </div>
+      <div>
+        <input type="text" id="postingcom">
+        <button id="post" onclick="posting()">Comment</button>
+      </div>
+    </div>
+  </div>  
+  <%}%>
+
+<%function dategen(dat){%>
+  <% console.log(dat);%>
+<%var date1 = new Date(dat);%>
+<%var date2 = new Date();%>
+<%var Difference_In_Time = date2.getTime() - date1.getTime();%>
+<%var Diff = Difference_In_Time / (1000 * 3600 * 24);%>
+<%if(Math.floor(Diff)==0){return (new Date(dat)).toLocaleTimeString('en-IN');}%>
+<%if(Math.floor(Diff)!=0){%>
+    <%if(Math.floor(Diff)==1){return "a day ago";}%>
+    <%if(Math.floor(Diff)!=1){return Math.floor(Diff)+" days ago";}}%>
+<%}%>
+
+<div class="comment">
+  <%if(postdetails.comments.length>0){%>
+    <%for(var i=postdetails.comments.length-1;i>=0;i--){%>
+      <div class='post'>
+        <input type="hidden" value="<%=postdetails.comments[i].commentid%>">
+        <div>
+          <img src="<%=postdetails.comments[i].profile_pic%>" alt="" height="50px" width="50px">
+        </div>
+        <div class="left-side">
+          <div class="timeuser">
+            <p><%=postdetails.comments[i].username%></p>
+            <p><%=dategen(postdetails.comments[i].date)%></p>
+          </div>
+          <div><%=postdetails.comments[i].commentbody%></div>
+          <div class="rbutton">
+            <%if(!loggedin){%>
+              <button onclick="location.href='/login'">
+                Reply
+              </button>
+            <%}%>
+            <%if(loggedin){%>
+            <button onclick='expanding(this)'>
+              Reply
+            </button>
+            <%}%>
+          </div>
+        </div>
+      </div>
+      <div class="reply areply">
+        <div>
+          <img src="<%=user.profile_image%>" alt="" height="50px" width="50px">
+        </div>
+        <div>
+          <div><%=user.username%></div>
+          <input type='text' class='postingrep'>
+          <button onclick='replying(this)'>
+            Reply
+          </button>
+        </div>
+      </div>
+      <div style="display: none;">
+      <%for(var j=postdetails.comments[i].reply.length-1;j>=0;j--){%>
+        <div class="alreply">
+          <div>
+            <img src="<%=postdetails.comments[i].reply[j].profile_pic%>" alt="" height="50px" width="50px">
+          </div>
+          <div>
+            <div class="timeuser"><p><%=postdetails.comments[i].reply[j].username%></p>
+                <p><%=dategen(postdetails.comments[i].reply[j].date)%></p>
+            </div>
+            <div><%=postdetails.comments[i].reply[j].replybody%></div>
+          </div>
+        </div>
+      <%}%> 
+    </div>  
+    <%}%>
+    <%}%>
+</div>
+</div> 
+</div>
+<div class="rightmain">
+    <h5 class="topairing">Trending Movies Worldwide</h5>
+    <div class="airinganime" style="background-color: rgb(0,0,0,0.3) ; ">
+    <% jsontopmoviesw.forEach(async (item,i)=>{%>
+      <div>
+        <div class="airing">
+          <%if(typeof jsontopmoviesw=='undefined'){%>
+            <div class="imageair"><img style="margin: 5px 3px 0px 3px; height:260px; width: 260px" src="https://www.planetf1.com/content/themes/planet/img/no_image.jpg" alt=""></div><%}%>
+          <%if(typeof jsontopmoviesw!='undefined'){%>
+          <div class="imageair"><img style="margin: 5px 3px 0px 3px; height:260px; width: 260px" src="https://image.tmdb.org/t/p/w500<%=item.poster_path%>" alt=""></div><%}%>
+        </div>
+      </div>  
+        <%})%>
+        <h5 class="topairing">Trending Series Worldwide</h5>
+        <div class="airinganime" style="background-color: rgb(0,0,0,0.0) ;">
+        <%for(i=0;i<5;i++){%>
+          <div>
+            <div class="airing">
+              <div class="imageair"><img style="margin: 5px 3px 0px 3px; height:260px; width: 260px" src="https://image.tmdb.org/t/p/w500<%=jsontopseriesw[i].poster_path%>" alt=""></div>
+            </div>
+          </div>
+      <%}%>
+    </div>
+</div>
+</div>
+</main>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<script src="/scripts/animehome.js"></script>
+<script src="/scripts/bingerscript.js"></script>
+</html>

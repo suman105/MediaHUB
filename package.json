@@ -1,0 +1,39 @@
+{
+  "name": "MediaHUB",
+  "version": "1.0.0",
+  "description": "social catlog website",
+  "main": "app.js",
+  "repository": "https://github.com/nithinkumarbalisetty98/MediaHUB",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Nithin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bson": "^5.3.0",
+    "buffer": "^6.0.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "ejs-lint": "^1.1.0",
+    "express": "^4.17.1",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.1",
+    "iso-639-1": "^2.1.8",
+    "lodash": "^4.17.21",
+    "md5": "^2.3.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.12.2",
+    "multer": "^1.4.2",
+    "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.19",
+    "parse-json": "^5.2.0",
+    "parse-jsonp": "^2.0.0",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7"
+  }
+}
